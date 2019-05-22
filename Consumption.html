@@ -32,14 +32,14 @@
 <nav>
 
 <select id="ad-select" hidden></select>
-<input id ="ad-input" type="text" value="" placeholder="Адреса" hidden>
+<input id ="ad-input" type="text" value="" placeholder="адреса" hidden>
 <button id="ad-button" hidden></button>
 
 <select id="id-select" hidden></select>
-<input id ="id-input" type="text" value="" placeholder="Тип" hidden>
+<input id ="id-input" type="text" value="" placeholder="тип ресурсу" hidden>
 <button id="id-button" hidden></button>
 
-<input id ="year-input" type="text" value="" placeholder="Рік" hidden>
+<input id ="year-input" type="text" value="" placeholder="рік (2000-2099)" hidden>
 <button id="year-button" hidden></button>
 
 <select id="type-select" hidden>
@@ -408,13 +408,13 @@ $("id-select").onchange = function(input){
 				if(id == $("id-input").value){var value1 = id; $("id-input").value = "";}
 				var k = k || (id == value2);
 			}
-			str += "<option class='add-remove'>\u2E3A</option>";
+			str += "<option class='add-remove'>New</option>";// колись тут замість New була \u2E3A - величезна риска
 			this.innerHTML = str;
 			this.value =  value1 || (k? value2: this.value);
 		}	
 		for(var i = 0; i < this.children.length; i++){this.children[i].hidden = (this.children[i].value == this.value);}
 	
-		$("id-input").hidden = this.value != "\u2E3A";
+		$("id-input").hidden = this.value != "New";
 		$("year-input").hidden = !$("id-input").hidden || !!main[$("ad-select").value][this.value].startYear;
 		$("type-select").hidden =!$("id-input").hidden || !$("year-input").hidden;
 	}
@@ -454,13 +454,13 @@ $("ad-select").onchange = function(input){
 			str += "<option>" + ad + "</option>";
 			if(ad == $("ad-input").value){var value = ad; $("ad-input").value = "";}
 		}
-		str += "<option class='add-remove'>\u2E3A</option>";
+		str += "<option class='add-remove'>New</option>";
 		this.innerHTML = str;
 		this.value = value || this.value;
 	}
 	for(var i = 0; i < this.children.length; i++){this.children[i].hidden = (this.children[i].value == this.value);}
 	
-	$("ad-input").hidden = this.value != "\u2E3A";
+	$("ad-input").hidden = this.value != "New";
 	$("id-select").hidden = !$("ad-input").hidden;
 	
 	$("ad-input").oninput(null);
