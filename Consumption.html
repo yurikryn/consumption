@@ -1,475 +1,548 @@
-<!DOCTYPE html><!--Created by Yuri Krynytskyi-->
+<!DOCTYPE html>
+<!--Created by Yuri Krynytskyi-->
 <html lang="uk-UA">
+
 <head>
 	<title>Consumption</title>
 	<meta charset="UTF-8">
 	<link rel="icon" href="consumption_icon.png">
 	<style>
-	* {box-sizing: border-box; user-select: none; font-family: Arial; outline: none}
-	body {width: 1260px; margin: auto}
-	nav, table, #save-button {margin-top: 16px}
-	
-	nav, nav *, #save-button {font-size: 16px; height: 1.5em;}
-	nav button:not(#p-month-year) {width: 1.5em}
-	#p-month-year {width: 8.4em; border-style: none; background-color: inherit; text-align: right; font-weight: bold}
-	nav *:not(button) {background-color: #eee}
-	option.add-remove {background-color: white; color: red}
-	
-	table, th, td {border: 1px solid; font-size: 16px}
-	.false td {width: 49px; text-align: right}
-	.false tr > th:first-child {width: 80px; text-align: left}
-	.false #table-button {width: 80px}
-	.true td {width: 80px; text-align: right}
-	.true tr > th:first-child {width: 49px}
-	.true #table-button {width: 49px}
-	td.empty {text-align: center !important}
-	
-	#save-button:disabled {visibility: hidden}
-</style>
+		* {
+			box-sizing: border-box;
+			user-select: none;
+			font-family: Arial;
+			outline: none
+		}
+
+		body {
+			width: 1260px;
+			margin: auto
+		}
+
+		nav,
+		table,
+		#save-button {
+			margin-top: 16px
+		}
+
+		nav,
+		nav *,
+		#save-button {
+			font-size: 16px;
+			height: 1.5em;
+		}
+
+		nav button:not(#p-month-year) {
+			width: 1.5em
+		}
+
+		#p-month-year {
+			width: 8.4em;
+			border-style: none;
+			background-color: inherit;
+			text-align: right;
+			font-weight: bold
+		}
+
+		nav *:not(button) {
+			background-color: #eee
+		}
+
+		option.add-remove {
+			background-color: white;
+			color: red
+		}
+
+		table,
+		th,
+		td {
+			border: 1px solid;
+			font-size: 16px
+		}
+
+		.false td {
+			width: 49px;
+			text-align: right
+		}
+
+		.false tr>th:first-child {
+			width: 80px;
+			text-align: left
+		}
+
+		.false #table-button {
+			width: 80px
+		}
+
+		.true td {
+			width: 80px;
+			text-align: right
+		}
+
+		.true tr>th:first-child {
+			width: 49px
+		}
+
+		.true #table-button {
+			width: 49px
+		}
+
+		td.empty {
+			text-align: center !important
+		}
+
+		#save-button:disabled {
+			visibility: hidden
+		}
+	</style>
 </head>
+
 <body>
 
-<nav>
+	<nav>
 
-<select id="ad-select" hidden></select>
-<input id ="ad-input" type="text" value="" placeholder="адреса" hidden>
-<button id="ad-button" hidden></button>
+		<select id="ad-select" hidden></select>
+		<input id="ad-input" type="text" value="" placeholder="адреса" hidden>
+		<button id="ad-button" hidden></button>
 
-<select id="id-select" hidden></select>
-<input id ="id-input" type="text" value="" placeholder="тип ресурсу" hidden>
-<button id="id-button" hidden></button>
+		<select id="id-select" hidden></select>
+		<input id="id-input" type="text" value="" placeholder="тип ресурсу" hidden>
+		<button id="id-button" hidden></button>
 
-<input id ="year-input" type="text" value="" placeholder="рік (2000-2099)" hidden>
-<button id="year-button" hidden></button>
+		<input id="year-input" type="text" value="" placeholder="рік (2000-2099)" hidden>
+		<button id="year-button" hidden></button>
 
-<select id="type-select" hidden>
-	<option value="items">Показники</option>
-	<option value="total">Єдиний лічильник</option>
-	<option value="months:1">Cпоживання за місяць</option>
-	<option value="months:12">Споживання за рік</option>
-	<option value="months:">Споживання за період:</option>
-	<option value="excess-months:1">Надлишок за місяць</option>
-	<option value="excess-months:12">Надлишок за рік</option>
-	<option value="excess-months:">Надлишок за період:</option>
-</select>
+		<select id="type-select" hidden>
+			<option value="items">Показники</option>
+			<option value="total">Єдиний лічильник</option>
+			<option value="months:1">Cпоживання за місяць</option>
+			<option value="months:12">Споживання за рік</option>
+			<option value="months:">Споживання за період:</option>
+			<option value="excess-months:1">Надлишок за місяць</option>
+			<option value="excess-months:12">Надлишок за рік</option>
+			<option value="excess-months:">Надлишок за період:</option>
+		</select>
 
-<button id="p-month-year" hidden></button>
-<input id="p-input" type="text" value="" hidden>
-<button id="p-button" hidden></button>
+		<button id="p-month-year" hidden></button>
+		<input id="p-input" type="text" value="" hidden>
+		<button id="p-button" hidden></button>
 
-<input id ="k-input" type="number" value="" hidden>
+		<input id="k-input" type="number" value="" hidden>
 
-</nav>
+	</nav>
 
-<table id="table" hidden></table>
+	<table id="table" hidden></table>
 
-<button id="save-button" disabled>SAVE</button>
-<a id="save-anchor" download="main.txt" hidden></a>
+	<button id="save-button" disabled>SAVE</button>
+	<a id="save-anchor" download="main.txt" hidden></a>
 
-<!--#############################################################################################################-->
-<script>
-"use strict";
-function loadMain(f){
-	var s = document.createElement("script");
-	s.type = "application/javascript";
-	s.onload = function(){document.head.removeChild(this); f(main);};
-	s.onerror = function(){ f({})};
-	s.src = document.getElementById("save-anchor").download;
-	document.head.appendChild(s);
-}
+	<!--#############################################################################################################-->
+	<script>
+		"use strict";
+		function loadMain(f) {
+			var s = document.createElement("script");
+			s.type = "application/javascript";
+			s.onload = function () { document.head.removeChild(this); f(main); };
+			s.onerror = function () { f({}) };
+			s.src = document.getElementById("save-anchor").download;
+			document.head.appendChild(s);
+		}
 
-loadMain(function(main){
-var $ = function(id){ return document.getElementById(id);};
-var mainString = JSON.stringify(main);
-var mainStringNew = mainString;
-var memory = {};
-{// main .month .monthLength .total .consumption .excess .visualize .start ######################################
-main.month = function(i){
-	switch(i){
-		case  0: return "Січень";
-		case  1: return "Лютий";
-		case  2: return "Березень";
-		case  3: return "Квітень";
-		case  4: return "Травень";
-		case  5: return "Червень";
-		case  6: return "Липень";
-		case  7: return "Серпень";
-		case  8: return "Вересень";
-		case  9: return "Жовтень";
-		case 10: return "Листопад";
-		case 11: return "Грудень";
-	}
-};//-------------------------------------------------------------------------------------------------------------
-main.monthLength = function(i,y){
-	switch(i){
-		case  0: return 31;
-		case  1: return (y % 4)? 28: 29;
-		case  2: return 31;
-		case  3: return 30;
-		case  4: return 31;
-		case  5: return 30;
-		case  6: return 31;
-		case  7: return 31;
-		case  8: return 30;
-		case  9: return 31;
-		case 10: return 30;
-		case 11: return 31;
-	}
-};//-------------------------------------------------------------------------------------------------------------
-main.total = function(ad,id){
-	var sign = ad + "." + id + ".total";
-	if(!memory[sign]){
-	    var input = this[ad][id], output = [], s = 0, x = 0;
-		if(input.exeption){
-			for(var k = 0; k < input.exeption.length; k++){
-				for(; x < input.exeption[k].date; x++){
-					output[x] = (input.item[x] !== "")? +input.item[x] + s: "";
-				}
-				s += input.exeption[k].diff;
+		loadMain(function (main) {
+			var $ = function (id) { return document.getElementById(id); };
+			var mainString = JSON.stringify(main);
+			var mainStringNew = mainString;
+			var memory = {};
+			{// main .month .monthLength .total .consumption .excess .visualize .start ######################################
+				main.month = function (i) {
+					switch (i) {
+						case 0: return "Січень";
+						case 1: return "Лютий";
+						case 2: return "Березень";
+						case 3: return "Квітень";
+						case 4: return "Травень";
+						case 5: return "Червень";
+						case 6: return "Липень";
+						case 7: return "Серпень";
+						case 8: return "Вересень";
+						case 9: return "Жовтень";
+						case 10: return "Листопад";
+						case 11: return "Грудень";
+					}
+				};//-------------------------------------------------------------------------------------------------------------
+				main.monthLength = function (i, y) {
+					switch (i) {
+						case 0: return 31;
+						case 1: return (y % 4) ? 28 : 29;
+						case 2: return 31;
+						case 3: return 30;
+						case 4: return 31;
+						case 5: return 30;
+						case 6: return 31;
+						case 7: return 31;
+						case 8: return 30;
+						case 9: return 31;
+						case 10: return 30;
+						case 11: return 31;
+					}
+				};//-------------------------------------------------------------------------------------------------------------
+				main.total = function (ad, id) {
+					var sign = ad + "." + id + ".total";
+					if (!memory[sign]) {
+						var input = this[ad][id], output = [], s = 0, x = 0;
+						if (input.exeption) {
+							for (var k = 0; k < input.exeption.length; k++) {
+								for (; x < input.exeption[k].date; x++) {
+									output[x] = (input.item[x] !== "") ? +input.item[x] + s : "";
+								}
+								s += input.exeption[k].diff;
+							}
+						}
+						for (; x < input.item.length; x++) {
+							output[x] = (input.item[x] !== "") ? +input.item[x] + s : "";
+						}
+						memory[sign] = output;
+					}
+					return memory[sign];// []
+				};//-------------------------------------------------------------------------------------------------------------
+				main.consumption = function (ad, id, k) {
+					var sign = ad + "." + id + ".months" + k;
+					if (!memory[sign]) {
+						var input = this.total(ad, id), output = [];
+						if (k) {
+							for (var x = 0; x < +k && x < input.length; x++) { output[x] = ""; }
+							for (; x < input.length; x++) {
+								output[x] = (input[x] !== "" && input[x - k] !== "") ? input[x] - input[x - k] : "";
+							}
+						}
+						memory[sign] = output;
+					}
+					return memory[sign]; // []
+				};//-------------------------------------------------------------------------------------------------------------
+				main.excess = function (ad, id, k) {
+					var sign = ad + "." + id + ".excess-months" + k;
+					if (!memory[sign]) {
+						var input = this.consumption(ad, id, k), output = [], min = [];
+						for (var n = 0; n < 12; n++) {
+							min[n] = Number.MAX_VALUE;
+							for (var x = n; x < input.length; x += 12) { if (input[x] !== "" && input[x] < min[n]) { min[n] = input[x]; } }
+						}
+						for (x = 0; x < input.length; x++) {
+							output[x] = (input[x] !== "") ? (input[x] - min[x % 12]).toFixed(0) : "";
+						}
+						memory[sign] = output;
+					}
+					return memory[sign]; // []
+				};//-------------------------------------------------------------------------------------------------------------
+				main.visualize = function F(t = false) {
+					if (F.orientation === void 0) { F.orientation = true }
+					F.orientation = t ? !F.orientation : F.orientation;
+					var ad = $("ad-select").value;
+					var id = $("id-select").value;
+					var type = $("type-select").value.split(":");
+					var k = type.length > 1 && (type[1] || $("k-input").value) || "";
+					var sign = ad + "." + id + "." + type[0] + k + "." + F.orientation;
+					if (!memory[sign]) {
+						var input = {};
+						switch (type[0]) {
+							case "items": input = this[ad][id].item; break;
+							case "total": input = this.total(ad, id); break;
+							case "months": input = this.consumption(ad, id, k); break;
+							case "excess-months": input = this.excess(ad, id, k); break;
+						}
+						var maxN, stepN, contentN, maxM, stepM, contentM, str, m, n, startYear = this[ad][id].startYear;
+						if (F.orientation) {
+							maxM = 11;
+							stepM = 1;
+							contentM = this.month;
+							maxN = 12 * Math.floor((this[ad][id].item.length) / 12);
+							stepN = 12;
+							contentN = function (n) { return startYear + n / 12 };
+						}
+						else {
+							maxN = 11;
+							stepN = 1;
+							contentN = this.month;
+							maxM = 12 * Math.floor((this[ad][id].item.length) / 12);
+							stepM = 12;
+							contentM = function (m) { return startYear + m / 12 };
+						}
+						str = "<tr><th><button id='table-button'>T</button></th>";
+						for (m = 0; m <= maxM; m += stepM) { str += "<th>" + contentM(m) + "</th>"; }
+						str += "</tr>";
+						for (n = 0; n <= maxN; n += stepN) {
+							str += "<tr><th>" + contentN(n) + "</th>";
+							for (m = 0; m <= maxM; m += stepM) {
+								str += "<td";
+								str += (input[m + n] === "") ? " class='empty'>\u2014" : ">";
+								str += (input[m + n] === void 0) ? "" : input[m + n];
+								str += "</td>";
+							}
+							str += "</tr>";
+						}
+						memory[sign] = str;
+					}
+					$("table").className = "" + F.orientation;
+					$("table").innerHTML = memory[sign];
+					$("table-button").onclick = () => this.visualize(true);
+				};//-------------------------------------------------------------------------------------------------------------
+				main.start = function () {
+					var obj = {};
+					obj.min = Number.MAX_VALUE;
+					for (var ad in this) {
+						for (var id in this[ad]) {
+							var x = this[ad][id];
+							obj.last = 12 * x.startYear + x.item.length;
+							if (obj.min > obj.last) {
+								obj.min = obj.last;
+								obj.ad = ad;
+								obj.id = id;
+							}
+						}
+					}
+					$("ad-input").value = obj.ad;
+					$("id-input").value = obj.id;
+
+					$("ad-select").hidden = !1;
+					$("ad-select").onchange(null);
+				};//-------------------------------------------------------------------------------------------------------------
+				Object.defineProperties(main, {
+					month: { enumerable: !1 },
+					monthLength: { enumerable: !1 },
+					total: { enumerable: !1 },
+					consumption: { enumerable: !1 },
+					excess: { enumerable: !1 },
+					visualize: { enumerable: !1 },
+					start: { enumerable: !1 }
+				});
 			}
-		}
-		for(; x < input.item.length; x++){
-			output[x] = (input.item[x] !== "")? +input.item[x] + s: "";
-		}
-		memory[sign] = output;
-	}
-	return memory[sign];// []
-};//-------------------------------------------------------------------------------------------------------------
-main.consumption = function(ad,id,k){
-	var sign = ad + "." + id + ".months" + k;
-	if(!memory[sign]){
-		var input = this.total(ad,id), output = [];
-		if(k){
-			for(var x = 0; x < +k && x < input.length; x++){output[x] = "";}
-			for(; x < input.length; x++){
-				output[x] = (input[x] !== "" && input[x-k] !== "")? input[x] - input[x-k]: "";
-			}
-		}
-		memory[sign] = output;
-	}
-	return memory[sign]; // []
-};//-------------------------------------------------------------------------------------------------------------
-main.excess = function(ad,id,k){
-	var sign = ad + "." + id + ".excess-months" + k;
-	if(!memory[sign]){
-		var input = this.consumption(ad,id,k), output = [], min = [];
-		for(var n = 0; n < 12; n++){
-			min[n] = Number.MAX_VALUE;
-			for(var x = n; x < input.length; x += 12){ if(input[x] !== "" && input[x] < min[n]){ min[n] = input[x];}}
-		}
-		for( x = 0; x < input.length; x++){
-			output[x] = (input[x] !== "")? (input[x] - min[x % 12]).toFixed(0): "";
-		}
-		memory[sign] = output;
-	}
-	return memory[sign]; // []
-};//-------------------------------------------------------------------------------------------------------------
-main.visualize = function F(t = false){
-	if(F.orientation === void 0){ F.orientation = true }
-	F.orientation = t? !F.orientation: F.orientation;
-	var ad = $("ad-select").value;
-	var id = $("id-select").value;
-	var type = $("type-select").value.split(":");
-	var k = type.length > 1 && (type[1] || $("k-input").value) || "";
-	var sign = ad + "." + id + "." + type[0] + k + "." + F.orientation;
-	if(!memory[sign]){
-	var input = {};
-	switch(type[0]){
-			case "items": input = this[ad][id].item; break;
-			case "total": input = this.total(ad, id); break;
-			case "months": input = this.consumption(ad, id, k); break;
-			case "excess-months": input = this.excess(ad, id, k); break;
-		}
-		var maxN, stepN, contentN, maxM, stepM, contentM, str, m, n, startYear = this[ad][id].startYear; 
-		if(F.orientation){
-			maxM = 11;
-			stepM = 1;
-			contentM = this.month;
-			maxN = 12 * Math.floor( (this[ad][id].item.length)/12 );
-			stepN = 12;
-			contentN = function(n){ return startYear + n/12};
-		}
-		else{
-			maxN = 11;
-			stepN = 1;
-			contentN = this.month;
-			maxM = 12 * Math.floor( (this[ad][id].item.length)/12 );
-			stepM = 12;
-			contentM = function(m){ return startYear + m/12};
-		}
-		str = "<tr><th><button id='table-button'>T</button></th>";
-		for( m = 0; m <= maxM; m += stepM){ str += "<th>" + contentM(m) + "</th>";}
-		str += "</tr>";
-		for( n = 0; n <= maxN; n += stepN){
-			str += "<tr><th>" + contentN(n) + "</th>";
-			for( m = 0; m <= maxM; m += stepM){
-				str += "<td";
-				str += (input[m + n] === "")? " class='empty'>\u2014": ">";
-				str += (input[m + n] === void 0)? "": input[m + n];
-				str += "</td>";
-			}
-			str += "</tr>";
-		}
-		memory[sign] = str;
-	}
-	$("table").className = "" + F.orientation;
-	$("table").innerHTML = memory[sign];
-	$("table-button").onclick = () => this.visualize(true);
-};//-------------------------------------------------------------------------------------------------------------
-main.start = function(){
-	var obj = {};
-	obj.min = Number.MAX_VALUE;
-	for(var ad in this){
-		for(var id in this[ad]){
-			var x = this[ad][id];
-			obj.last = 12 * x.startYear + x.item.length;
-			if(obj.min > obj.last){
-				obj.min = obj.last;
-				obj.ad = ad;
-				obj.id = id;
-			}
-		}
-	}
-	$("ad-input").value = obj.ad;
-	$("id-input").value = obj.id;
-	
-	$("ad-select").hidden = !1;
-	$("ad-select").onchange(null);
-};//-------------------------------------------------------------------------------------------------------------
-Object.defineProperties( main,{
-	month:{ enumerable: !1},
-	monthLength:{ enumerable: !1},
-	total:{ enumerable: !1},
-	consumption:{ enumerable: !1},
-	excess:{ enumerable: !1},
-	visualize:{ enumerable: !1},
-	start:{ enumerable: !1}
-});}
-//###############################################################################################################
-document.body.addEventListener(
-	"focus",
-	function(){
-		if($("save-button").value){
-			$("save-button").value = !1;
-			setTimeout(
-				function(){
-					loadMain(function(main){ $("save-button").disabled = mainStringNew == ( mainString = JSON.stringify(main));})
+			//###############################################################################################################
+			document.body.addEventListener(
+				"focus",
+				function () {
+					if ($("save-button").value) {
+						$("save-button").value = !1;
+						setTimeout(
+							function () {
+								loadMain(function (main) { $("save-button").disabled = mainStringNew == (mainString = JSON.stringify(main)); })
+							},
+							2000
+						);
+					}
 				},
-				2000
+				true
 			);
-		}
-	},
-	true
-);
-//###############################################################################################################
-$("save-button").onclick = function(){
-	this.value = !0;
-	$("save-anchor").href = "data:application/javascript;charset=utf-8," + encodeURIComponent("var main = " + mainStringNew + ";");
-	$("save-anchor").click();
-};
-//###############################################################################################################
-$("p-button").onclick = function(){ 
-	var x = main[$("ad-select").value][$("id-select").value];
-	switch(this.textContent){
-		case "\u2191":// "&uarr;"
-			var s = "";
-			if(x.exeption && x.exeption[x.exeption.length - 1].date == x.item.length - 1){
-				s = x.exeption.pop().diff + "+";
-				if(!x.exeption.length){delete x.exeption;}
-			}
-			$("p-input").value = s + x.item.pop() || "-";
-			break;
-		case "\u2193":// "&darr;"
-			if($("p-input").oninput.diff){
-				if(!x.exeption){x.exeption = [];}
-				x.exeption.push({ date: x.item.length, diff: +$("p-input").oninput.diff});
-			}
-			x.item.push($("p-input").oninput.item);
-			$("p-input").value = "";
-			break;
-	}
-	memory = {};
-	$("save-button").disabled = mainString == (mainStringNew = JSON.stringify(main));
-	$("p-input").oninput(null);
-	main.visualize();
-};
-//###############################################################################################################
-$("p-input").onblur = function(){ this.id == memory.onfocusId && this.focus();};
-$("p-input").onkeyup = function(e){ e.keyCode == 13? $("p-button").hidden || $("p-button").onclick(null): e.keyCode != 46 || (this.value = "") || this.oninput(null);};
-$("p-input").oninput = function F(input){
-	var item;
-	if(this.hidden){$("p-button").hidden = !0;}
-	else{
-		var x = main[$("ad-select").value][$("id-select").value];
-		if(!input){ memory.onfocusId = this.id; this.focus();
-			F.month = x.item.length % 12;
-			F.year = x.startYear + Math.floor( x.item.length /12);
-			F.period = main.monthLength( F.month, F.year);
-			F.y = F.last = "";
-			for( var k = 1; k <= x.item.length; k++){
-				if(x.item[x.item.length - k] !== ""){ F.y = x.item[x.item.length - k]; F.last = (k == 1)? F.y + "": ""; break;}
-			}
-			$("p-month-year").innerHTML = main.month( F.month) + " " + F.year + ":";
-		}
-	/* (0: "")(1: "-")   (2: "diff")                        (3: "item") (4: ".")                       (5: "3")      (6: "date")                      (7: "hours")             (8: "minutes")  */
-		var z = /^(-)$|^([1-9]\d{0,5}(?=\+)|(?!\+))\+?($|\d{1,6}(?:$|(\.)(?:$|\d{1,3})))(?:\x20(?:[20]|(3)|(2[5-9]|3[01]|0[1-5])(?:\x20(?:[012]|([01]\d|2[0-3])(?::(?:[0-5]|([0-5]\d))?)?)?)?)?)?$/.exec(this.value);
-		if( !z || z[4] && ( +z[2] + +z[3] < +F.y || !F.last) || z[5] && (F.month == 1) || +z[6] > F.period ){ this.value = F.value;}
-		else{
-			F.value = this.value;
-			$("p-button").innerHTML = z[0]? "\u2193": "\u2191";
-			$("p-button").hidden = !(x.item.length && !z[0] || z[1] || !z[4] && z[3] && +z[2] + +z[3] >= +F.y || z[8] );
-			F.diff = +z[2];
-			F.item = z[1]? "": !z[8]? +z[3]: (( item = +F.last - z[2] + Math.round( (+z[3] + +z[2] - F.last) * F.period / (15 + (z[6] - 1 + z[7]/24 + z[8]/1440 - 15 + F.period) % F.period))) < 0)? 0: item;
-			console.log( +z[2], +z[3]);
-		}
-	}
-	$("p-month-year").hidden = this.hidden;
-};
-//###############################################################################################################
-$("k-input").onblur = function(){ this.id == memory.onfocusId && this.focus();};
-$("k-input").onkeyup = function(e){ e.keyCode != 46 || (this.value = "") || this.oninput(null);};
-$("k-input").oninput = function F(input){ 
-	if(!input){ memory.onfocusId = this.id; this.focus();}
-	if(!this.validity.valid || !/^([1-9]\d*)?$/.test(this.value)){ this.value = F.value;}
-	else{
-		F.value = this.value;
-		main.visualize();
-		}
-};
-//###############################################################################################################
-$("type-select").onchange = function(){ 
-	if(this.hidden){ $("p-input").hidden = $("k-input").hidden = !0;}
-	else{
-		for(var i = 0; i < this.children.length; i++){this.children[i].hidden = (this.children[i].value == this.value);}
-	
-		($("p-input").hidden = this.value != "items") || ($("p-input").value = "");
-		($("k-input").hidden = !this.value.endsWith(":"))? main.visualize(): $("k-input").oninput(null);
-	}
-	$("p-input").oninput(null);
-	$("table").hidden = this.hidden;
-};
-//###############################################################################################################
-$("year-button").onclick = function(){ 
-	var x = main[$("ad-select").value][$("id-select").value];
-	x.startYear = +$("year-input").value;
-	x.item = [];
-	memory = {};
-//	$("save-button").disabled = mainString == (mainStringNew = JSON.stringify(main));
-	$("type-select").value = "items";
-	$("id-select").onchange(null);
-};
-//###############################################################################################################
-$("year-input").onblur = function(){ this.id == memory.onfocusId && this.focus();};
-$("year-input").onkeyup = function(e){ e.keyCode == 13? $("year-button").hidden || $("year-button").onclick(null): e.keyCode != 46 || (this.value = "") || this.oninput(null);};
-$("year-input").oninput = function F(input){ 
-	if(this.hidden){$("year-button").hidden = !0;}
-	else{
-		if(!input){ this.value = ""; memory.onfocusId = this.id; this.focus();}
-		if(!/^(?:2(?:0\d{0,2})?)?$/.test(this.value)){ this.value = F.value;}
-		else{
-			F.value = this.value;
-			($("year-button").hidden = this.value.length != 4) || ($("year-button").innerHTML = "\u2193");
-		}
-	}
-};
-//###############################################################################################################
-$("id-button").onclick = function(){ 
-	switch(this.textContent){
-		case "\u2193"://&darr;
-			main[$("ad-select").value][$("id-input").value] = {}; break;
-		case "\u00D7"://&times;
-			delete main[$("ad-select").value][$("id-input").value]; break;
-	}
-//	$("save-button").disabled = mainString == (mainStringNew = JSON.stringify(main));
-	$("id-select").onchange(null);
-};
-//###############################################################################################################
-$("id-input").onblur = function(){ this.id == memory.onfocusId && this.focus();};
-$("id-input").onkeyup = function(e){ e.keyCode == 13? $("id-button").hidden || $("id-button").onclick(null): e.keyCode != 46 || (this.value = "") || this.oninput(null);};
-$("id-input").oninput = function(input){ 
-	if(this.hidden){$("id-button").hidden = !0;}
-	else{
-		if(!input){ this.value = ""; memory.onfocusId = this.id; this.focus();}
-		if(!($("id-button").hidden = !this.value.trim() || this.value == $("id-select").value) || (this.value = "")){
-			for(var id in main[$("ad-select").value]){var k = k || (id == this.value);}
-			$("id-button").innerHTML = k? "\u00D7": "\u2193";
-		}
-	}
-};
-//###############################################################################################################
-$("id-select").onchange = function(input){
-	if(this.hidden){$("id-input").hidden = $("year-input").hidden = $("type-select").hidden = !0;}
-	else{
-		if(!input){
-			var value2 = this.value;
-			var str = "";
-			for(var id in main[$("ad-select").value]){
-				str += "<option>" + id + "</option>";
-				if(id == $("id-input").value){var value1 = id; $("id-input").value = "";}
-				var k = k || (id == value2);
-			}
-			str += "<option class='add-remove'>New</option>";// колись тут замість New була \u2E3A - величезна риска
-			this.innerHTML = str;
-			this.value =  value1 || (k? value2: this.value);
-		}	
-		for(var i = 0; i < this.children.length; i++){this.children[i].hidden = (this.children[i].value == this.value);}
-	
-		$("id-input").hidden = this.value != "New";
-		$("year-input").hidden = !$("id-input").hidden || !!main[$("ad-select").value][this.value].startYear;
-		$("type-select").hidden =!$("id-input").hidden || !$("year-input").hidden;
-	}
-	$("id-input").oninput(null);
-	$("year-input").oninput(null);
-	$("type-select").onchange(null);
-};
-//###############################################################################################################
-$("ad-button").onclick = function(){ 
-	switch(this.textContent){
-		case "\u2193"://&darr;
-			main[$("ad-input").value] = {}; break;
-		case "\u00D7"://&times;
-			delete main[$("ad-input").value]; break;
-	}
-//	$("save-button").disabled = mainString == (mainStringNew = JSON.stringify(main));
-	$("ad-select").onchange(null);
-};
-//###############################################################################################################
-$("ad-input").onblur = function(){ this.id == memory.onfocusId && this.focus();};
-$("ad-input").onkeyup = function(e){ e.keyCode == 13? $("ad-button").hidden || $("ad-button").onclick(null): e.keyCode != 46 || (this.value = "") || this.oninput(null);};
-$("ad-input").oninput = function(input){
-	if(this.hidden){$("ad-button").hidden = !0;}
-	else{
-		if(!input){ this.value = ""; memory.onfocusId = this.id; this.focus();}
-		if(!($("ad-button").hidden = !this.value.trim() || this.value == $("ad-select").value) || (this.value = "")){
-			for(var ad in main){var k = k || ad == this.value;}
-			$("ad-button").innerHTML = k? "\u00D7": "\u2193";
-		}
-	}
-};
-//###############################################################################################################
-$("ad-select").onchange = function(input){ 
-	if(!input){
-		var str = "";
-		for(var ad in main){
-			str += "<option>" + ad + "</option>";
-			if(ad == $("ad-input").value){var value = ad; $("ad-input").value = "";}
-		}
-		str += "<option class='add-remove'>New</option>";
-		this.innerHTML = str;
-		this.value = value || this.value;
-	}
-	for(var i = 0; i < this.children.length; i++){this.children[i].hidden = (this.children[i].value == this.value);}
-	
-	$("ad-input").hidden = this.value != "New";
-	$("id-select").hidden = !$("ad-input").hidden;
-	
-	$("ad-input").oninput(null);
-	$("id-select").onchange(null);
-};
-//###############################################################################################################
-main.start();
-});
-</script>
-<!--#############################################################################################################-->
+			//###############################################################################################################
+			$("save-button").onclick = function () {
+				this.value = !0;
+				$("save-anchor").href = "data:application/javascript;charset=utf-8," + encodeURIComponent("var main = " + mainStringNew + ";");
+				$("save-anchor").click();
+			};
+			//###############################################################################################################
+			$("p-button").onclick = function () {
+				var x = main[$("ad-select").value][$("id-select").value];
+				switch (this.textContent) {
+					case "\u2191":// "&uarr;"
+						var s = "";
+						if (x.exeption && x.exeption[x.exeption.length - 1].date == x.item.length - 1) {
+							s = x.exeption.pop().diff + "+";
+							if (!x.exeption.length) { delete x.exeption; }
+						}
+						$("p-input").value = s + x.item.pop() || "-";
+						break;
+					case "\u2193":// "&darr;"
+						if ($("p-input").oninput.diff) {
+							if (!x.exeption) { x.exeption = []; }
+							x.exeption.push({ date: x.item.length, diff: +$("p-input").oninput.diff });
+						}
+						x.item.push($("p-input").oninput.item);
+						$("p-input").value = "";
+						break;
+				}
+				memory = {};
+				$("save-button").disabled = mainString == (mainStringNew = JSON.stringify(main));
+				$("p-input").oninput(null);
+				main.visualize();
+			};
+			//###############################################################################################################
+			$("p-input").onblur = function () { this.id == memory.onfocusId && this.focus(); };
+			$("p-input").onkeyup = function (e) { e.keyCode == 13 ? $("p-button").hidden || $("p-button").onclick(null) : e.keyCode != 46 || (this.value = "") || this.oninput(null); };
+			$("p-input").oninput = function F(input) {
+				var item;
+				if (this.hidden) { $("p-button").hidden = !0; }
+				else {
+					var x = main[$("ad-select").value][$("id-select").value];
+					if (!input) {
+					memory.onfocusId = this.id; this.focus();
+						F.month = x.item.length % 12;
+						F.year = x.startYear + Math.floor(x.item.length / 12);
+						F.period = main.monthLength(F.month, F.year);
+						F.y = F.last = "";
+						for (var k = 1; k <= x.item.length; k++) {
+							if (x.item[x.item.length - k] !== "") { F.y = x.item[x.item.length - k]; F.last = (k == 1) ? F.y + "" : ""; break; }
+						}
+						$("p-month-year").innerHTML = main.month(F.month) + " " + F.year + ":";
+					}
+					/* (0: "")(1: "-")   (2: "diff")                        (3: "item") (4: ".")                       (5: "3")      (6: "date")                      (7: "hours")             (8: "minutes")  */
+					var z = /^(-)$|^([1-9]\d{0,5}(?=\+)|(?!\+))\+?($|\d{1,6}(?:$|(\.)(?:$|\d{1,3})))(?:\x20(?:[20]|(3)|(2[5-9]|3[01]|0[1-5])(?:\x20(?:[012]|([01]\d|2[0-3])(?::(?:[0-5]|([0-5]\d))?)?)?)?)?)?$/.exec(this.value);
+					if (!z || z[4] && (+z[2] + +z[3] < +F.y || !F.last) || z[5] && (F.month == 1) || +z[6] > F.period) { this.value = F.value; }
+					else {
+						F.value = this.value;
+						$("p-button").innerHTML = z[0] ? "\u2193" : "\u2191";
+						$("p-button").hidden = !(x.item.length && !z[0] || z[1] || !z[4] && z[3] && +z[2] + +z[3] >= +F.y || z[8]);
+						F.diff = +z[2];
+						F.item = z[1] ? "" : !z[8] ? +z[3] : ((item = +F.last - z[2] + Math.round((+z[3] + +z[2] - F.last) * F.period / (15 + (z[6] - 1 + z[7] / 24 + z[8] / 1440 - 15 + F.period) % F.period))) < 0) ? 0 : item;
+						console.log(+z[2], +z[3]);
+					}
+				}
+				$("p-month-year").hidden = this.hidden;
+			};
+			//###############################################################################################################
+			$("k-input").onblur = function () { this.id == memory.onfocusId && this.focus(); };
+			$("k-input").onkeyup = function (e) { e.keyCode != 46 || (this.value = "") || this.oninput(null); };
+			$("k-input").oninput = function F(input) {
+				if (!input) { memory.onfocusId = this.id; this.focus(); }
+				if (!this.validity.valid || !/^([1-9]\d*)?$/.test(this.value)) { this.value = F.value; }
+				else {
+					F.value = this.value;
+					main.visualize();
+				}
+			};
+			//###############################################################################################################
+			$("type-select").onchange = function () {
+				if (this.hidden) { $("p-input").hidden = $("k-input").hidden = !0; }
+				else {
+					for (var i = 0; i < this.children.length; i++) { this.children[i].hidden = (this.children[i].value == this.value); }
+
+					($("p-input").hidden = this.value != "items") || ($("p-input").value = "");
+					($("k-input").hidden = !this.value.endsWith(":")) ? main.visualize() : $("k-input").oninput(null);
+				}
+				$("p-input").oninput(null);
+				$("table").hidden = this.hidden;
+			};
+			//###############################################################################################################
+			$("year-button").onclick = function () {
+				var x = main[$("ad-select").value][$("id-select").value];
+				x.startYear = +$("year-input").value;
+				x.item = [];
+				memory = {};
+				//	$("save-button").disabled = mainString == (mainStringNew = JSON.stringify(main));
+				$("type-select").value = "items";
+				$("id-select").onchange(null);
+			};
+			//###############################################################################################################
+			$("year-input").onblur = function () { this.id == memory.onfocusId && this.focus(); };
+			$("year-input").onkeyup = function (e) { e.keyCode == 13 ? $("year-button").hidden || $("year-button").onclick(null) : e.keyCode != 46 || (this.value = "") || this.oninput(null); };
+			$("year-input").oninput = function F(input) {
+				if (this.hidden) { $("year-button").hidden = !0; }
+				else {
+					if (!input) { this.value = ""; memory.onfocusId = this.id; this.focus(); }
+					if (!/^(?:2(?:0\d{0,2})?)?$/.test(this.value)) { this.value = F.value; }
+					else {
+						F.value = this.value;
+						($("year-button").hidden = this.value.length != 4) || ($("year-button").innerHTML = "\u2193");
+					}
+				}
+			};
+			//###############################################################################################################
+			$("id-button").onclick = function () {
+				switch (this.textContent) {
+					case "\u2193"://&darr;
+						main[$("ad-select").value][$("id-input").value] = {}; break;
+					case "\u00D7"://&times;
+						delete main[$("ad-select").value][$("id-input").value]; break;
+				}
+				//	$("save-button").disabled = mainString == (mainStringNew = JSON.stringify(main));
+				$("id-select").onchange(null);
+			};
+			//###############################################################################################################
+			$("id-input").onblur = function () { this.id == memory.onfocusId && this.focus(); };
+			$("id-input").onkeyup = function (e) { e.keyCode == 13 ? $("id-button").hidden || $("id-button").onclick(null) : e.keyCode != 46 || (this.value = "") || this.oninput(null); };
+			$("id-input").oninput = function (input) {
+				if (this.hidden) { $("id-button").hidden = !0; }
+				else {
+					if (!input) { this.value = ""; memory.onfocusId = this.id; this.focus(); }
+					if (!($("id-button").hidden = !this.value.trim() || this.value == $("id-select").value) || (this.value = "")) {
+						for (var id in main[$("ad-select").value]) { var k = k || (id == this.value); }
+						$("id-button").innerHTML = k ? "\u00D7" : "\u2193";
+					}
+				}
+			};
+			//###############################################################################################################
+			$("id-select").onchange = function (input) {
+				if (this.hidden) { $("id-input").hidden = $("year-input").hidden = $("type-select").hidden = !0; }
+				else {
+					if (!input) {
+						var value2 = this.value;
+						var str = "";
+						for (var id in main[$("ad-select").value]) {
+							str += "<option>" + id + "</option>";
+							if (id == $("id-input").value) { var value1 = id; $("id-input").value = ""; }
+							var k = k || (id == value2);
+						}
+						str += "<option class='add-remove'>New</option>";// колись тут замість New була \u2E3A - величезна риска
+						this.innerHTML = str;
+						this.value = value1 || (k ? value2 : this.value);
+					}
+					for (var i = 0; i < this.children.length; i++) { this.children[i].hidden = (this.children[i].value == this.value); }
+
+					$("id-input").hidden = this.value != "New";
+					$("year-input").hidden = !$("id-input").hidden || !!main[$("ad-select").value][this.value].startYear;
+					$("type-select").hidden = !$("id-input").hidden || !$("year-input").hidden;
+				}
+				$("id-input").oninput(null);
+				$("year-input").oninput(null);
+				$("type-select").onchange(null);
+			};
+			//###############################################################################################################
+			$("ad-button").onclick = function () {
+				switch (this.textContent) {
+					case "\u2193"://&darr;
+						main[$("ad-input").value] = {}; break;
+					case "\u00D7"://&times;
+						delete main[$("ad-input").value]; break;
+				}
+				//	$("save-button").disabled = mainString == (mainStringNew = JSON.stringify(main));
+				$("ad-select").onchange(null);
+			};
+			//###############################################################################################################
+			$("ad-input").onblur = function () { this.id == memory.onfocusId && this.focus(); };
+			$("ad-input").onkeyup = function (e) { e.keyCode == 13 ? $("ad-button").hidden || $("ad-button").onclick(null) : e.keyCode != 46 || (this.value = "") || this.oninput(null); };
+			$("ad-input").oninput = function (input) {
+				if (this.hidden) { $("ad-button").hidden = !0; }
+				else {
+					if (!input) { this.value = ""; memory.onfocusId = this.id; this.focus(); }
+					if (!($("ad-button").hidden = !this.value.trim() || this.value == $("ad-select").value) || (this.value = "")) {
+						for (var ad in main) { var k = k || ad == this.value; }
+						$("ad-button").innerHTML = k ? "\u00D7" : "\u2193";
+					}
+				}
+			};
+			//###############################################################################################################
+			$("ad-select").onchange = function (input) {
+				if (!input) {
+					var str = "";
+					for (var ad in main) {
+						str += "<option>" + ad + "</option>";
+						if (ad == $("ad-input").value) { var value = ad; $("ad-input").value = ""; }
+					}
+					str += "<option class='add-remove'>New</option>";
+					this.innerHTML = str;
+					this.value = value || this.value;
+				}
+				for (var i = 0; i < this.children.length; i++) { this.children[i].hidden = (this.children[i].value == this.value); }
+
+				$("ad-input").hidden = this.value != "New";
+				$("id-select").hidden = !$("ad-input").hidden;
+
+				$("ad-input").oninput(null);
+				$("id-select").onchange(null);
+			};
+			//###############################################################################################################
+			main.start();
+		});
+	</script>
+	<!--#############################################################################################################-->
 </body>
+
 </html>
