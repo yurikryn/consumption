@@ -134,25 +134,26 @@
 	<table id="table" hidden></table>
 
 	<button id="save-button" disabled>SAVE</button>
-	<a id="save-anchor" download="main.txt" hidden></a>
+	<a id="save-anchor" download="main.js" hidden></a>
 
 	<!--#############################################################################################################-->
 	<script>
 		"use strict";
-		function loadMain(f) {
-			var s = document.createElement("script");
+		let main = {};
+		function loadMain(callback) {
+			const s = document.createElement("script");
 			s.type = "application/javascript";
-			s.onload = function () { document.head.removeChild(this); f(main); };
-			s.onerror = function () { f({}) };
+			s.onload = function () { document.head.removeChild(this); callback(main); };
+			s.onerror = function () { callback({}) };
 			s.src = document.getElementById("save-anchor").download;
 			document.head.appendChild(s);
 		}
 
-		loadMain(function (main) {
-			var $ = function (id) { return document.getElementById(id); };
-			var mainString = JSON.stringify(main);
-			var mainStringNew = mainString;
-			var memory = {};
+		loadMain(main => {
+			const $ = id => document.getElementById(id);
+			let memory = {};
+			let mainString = JSON.stringify(main);
+			let mainStringNew = mainString;
 			{// main .month .monthLength .total .consumption .excess .visualize .start ######################################
 				main.month = function (i) {
 					switch (i) {
@@ -187,11 +188,12 @@
 					}
 				};//-------------------------------------------------------------------------------------------------------------
 				main.total = function (ad, id) {
-					var sign = ad + "." + id + ".total";
+					const sign = ad + "." + id + ".total";
 					if (!memory[sign]) {
-						var input = this[ad][id], output = [], s = 0, x = 0;
+						const input = this[ad][id], output = [];
+						let s = 0, x = 0;
 						if (input.exeption) {
-							for (var k = 0; k < input.exeption.length; k++) {
+							for (let k = 0; k < input.exeption.length; k++) {
 								for (; x < input.exeption[k].date; x++) {
 									output[x] = (input.item[x] !== "") ? +input.item[x] + s : "";
 								}
@@ -206,11 +208,12 @@
 					return memory[sign];// []
 				};//-------------------------------------------------------------------------------------------------------------
 				main.consumption = function (ad, id, k) {
-					var sign = ad + "." + id + ".months" + k;
+					const sign = ad + "." + id + ".months" + k;
 					if (!memory[sign]) {
-						var input = this.total(ad, id), output = [];
+						const input = this.total(ad, id), output = [];
 						if (k) {
-							for (var x = 0; x < +k && x < input.length; x++) { output[x] = ""; }
+							let x = 0;
+							for (; x < +k && x < input.length; x++) { output[x] = ""; }
 							for (; x < input.length; x++) {
 								output[x] = (input[x] !== "" && input[x - k] !== "") ? input[x] - input[x - k] : "";
 							}
@@ -220,9 +223,9 @@
 					return memory[sign]; // []
 				};//-------------------------------------------------------------------------------------------------------------
 				main.excess = function (ad, id, k) {
-					var sign = ad + "." + id + ".excess-months" + k;
+					const sign = ad + "." + id + ".excess-months" + k;
 					if (!memory[sign]) {
-						var input = this.consumption(ad, id, k), output = [], min = [];
+						const input = this.consumption(ad, id, k), output = [], min = [];
 						for (var n = 0; n < 12; n++) {
 							min[n] = Number.MAX_VALUE;
 							for (var x = n; x < input.length; x += 12) { if (input[x] !== "" && input[x] < min[n]) { min[n] = input[x]; } }
@@ -335,7 +338,7 @@
 			//###############################################################################################################
 			$("save-button").onclick = function () {
 				this.value = !0;
-				$("save-anchor").href = "data:application/javascript;charset=utf-8," + encodeURIComponent("var main = " + mainStringNew + ";");
+				$("save-anchor").href = "data:application/javascript;charset=utf-8," + encodeURIComponent("main = " + mainStringNew + ";");
 				$("save-anchor").click();
 			};
 			//###############################################################################################################
@@ -373,7 +376,7 @@
 				else {
 					var x = main[$("ad-select").value][$("id-select").value];
 					if (!input) {
-					memory.onfocusId = this.id; this.focus();
+						memory.onfocusId = this.id; this.focus();
 						F.month = x.item.length % 12;
 						F.year = x.startYear + Math.floor(x.item.length / 12);
 						F.period = main.monthLength(F.month, F.year);
